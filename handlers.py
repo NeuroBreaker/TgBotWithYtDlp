@@ -10,7 +10,7 @@ import aiofiles
 import aiohttp
 import yt_dlp
 
-MAX_FILE_SIZE=2*1024*1024*1024
+MAX_FILE_SIZE=50 * 1024 * 1024
 
 router = Router()
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class VideoDownloader:
     def __init__(self):
         self.ydl_opts = {
-            'format': 'best[filesize<2G]/best',
+            'format': 'best[filesize<50M]/best',
             'outtmpl': '%(title)s.%(ext)s',
             'quiet': True,
             'no_warnings': True,
@@ -42,7 +42,7 @@ class VideoDownloader:
                     # Проверяем размер файла
                     filesize = info.get('filesize') or info.get('filesize_approx', 0)
                     if filesize > MAX_FILE_SIZE:
-                        return None, f"Файл слишком большой ({filesize / 1024 / 1024:.1f} MB). Максимум 2G."
+                        return None, f"Файл слишком большой ({filesize / 1024 / 1024:.1f} MB). Максимум 50MB."
                     
                     # Скачиваем видео
                     ydl.download([url])
@@ -124,7 +124,7 @@ async def start_handler(msg: Message):
 • Прямые ссылки на видеофайлы
 
 <b>Ограничения:</b>
-📁 Максимальный размер файла: 2G
+📁 Максимальный размер файла: 50MB 
 ⏱ Время ожидания: 5 минут
 
 <b>Как использовать:</b>
@@ -135,6 +135,41 @@ async def start_handler(msg: Message):
 🚀 <i>Просто отправь ссылку и жди!</i>
     """
     await msg.answer(welcome_message, parse='HTML')
+
+@dp.message(Command("help"))
+async def help_handler(message: Message):
+    """Обработчик команды /help"""
+    help_text = """
+🆘 <b>Помощь по использованию бота:</b>
+
+<b>Основные команды:</b>
+/start - Главное меню
+/help - Эта справка
+
+<b>Как скачать видео:</b>
+1. Скопируй ссылку на видео
+2. Отправь её боту
+3. Жди завершения скачивания
+
+<b>Поддерживаемые форматы:</b>
+📹 MP4, AVI, MKV, WebM, MOV, FLV
+
+<b>Если видео не скачивается:</b>
+• Проверь, что ссылка рабочая
+• Убедись, что видео не приватное
+• Проверь размер файла (макс. 50MB)
+• Попробуй другую ссылку
+
+<b>Примеры поддерживаемых ссылок:</b>
+• https://youtube.com/watch?v=...
+• https://youtu.be/...
+• https://tiktok.com/@user/video/...
+• https://instagram.com/p/...
+• https://twitter.com/user/status/...
+
+❓ <i>Возникли вопросы? Свяжитесь с администратором.</i>
+    """
+    await message.answer(help_text, parse_mode='HTML')
 
 async def is_valid_url(url) -> bool:
     try:
@@ -206,6 +241,3 @@ async def text_handler(msg: Message):
                 f"❌ <b>Произошла ошибка:</b>\n<code>{str(e)}</code>",
                 parse_mode='HTML'
             )
-
-
-
