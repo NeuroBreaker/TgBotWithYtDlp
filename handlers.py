@@ -136,8 +136,8 @@ async def start_handler(msg: Message):
     """
     await msg.answer(welcome_message, parse='HTML')
 
-@dp.message(Command("help"))
-async def help_handler(message: Message):
+@router.message(Command("help"))
+async def help_handler(msg: Message):
     """Обработчик команды /help"""
     help_text = """
 🆘 <b>Помощь по использованию бота:</b>
@@ -169,7 +169,7 @@ async def help_handler(message: Message):
 
 ❓ <i>Возникли вопросы? Свяжитесь с администратором.</i>
     """
-    await message.answer(help_text, parse_mode='HTML')
+    await msg.answer(help_text, parse_mode='HTML')
 
 async def is_valid_url(url) -> bool:
     try:
