@@ -4,8 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-yt-dlp = "*"
 aiogram = "*"
+yt-dlp = "*"
+aiofiles = "*"
+aiohttp = "*"
 
 [dev-packages]
 
