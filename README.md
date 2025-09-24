@@ -1,9 +1,18 @@
 # My first successful telegram bot
 
-## For arch linux developers:
-```
+## How run:
+
+### Install dependencies:
+
+- Arch Linux
+```bash
 sudo pacman -Syu --needed python python-pipenv
 ```
 
-    then git clone repo and cd in him
-        then ```pipenv shell``` and run main.py
+### Run
+```bash
+cd TgBotWithYtDlp
+pipenv install
+pipenv shell
+python main.py
+```
